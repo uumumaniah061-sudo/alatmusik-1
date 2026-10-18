@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MUSIC QUEST IX — Pertemuan 1</title>
+<style>
+:root{--navy:#0d1830;--blue:#19345f;--gold:#d8a83e;--cream:#f7f3e8;--white:#fff;--muted:#68738a;--green:#2d8a62;--red:#c84b4b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#f7f3e8,#eef3fa);color:#18233a}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+header{background:linear-gradient(135deg,var(--navy),#172b51);color:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:5;box-shadow:0 4px 20px #0002}
+.logo{font-weight:900;letter-spacing:1px}.logo span{color:var(--gold)}.xp{background:#ffffff18;border:1px solid #ffffff30;padding:9px 14px;border-radius:20px;font-weight:700}
+main{max-width:1150px;margin:auto;padding:35px 20px 70px}.screen{display:none}.screen.active{display:block}
+.hero{background:linear-gradient(135deg,#101d39,#254a82);color:#fff;border-radius:28px;padding:48px 38px;box-shadow:0 20px 50px #14234225}
+.badge{display:inline-block;background:#fff1;border:1px solid #ffffff30;padding:7px 12px;border-radius:20px;color:#f5d47e;font-size:13px;font-weight:800}
+h1{font-size:clamp(34px,6vw,64px);margin:15px 0 8px}.hero p{max-width:800px;line-height:1.7;color:#e1e7f3}
+.btn{padding:12px 19px;border-radius:13px;font-weight:800;background:var(--gold);color:#17233d;transition:.2s}.btn:hover{transform:translateY(-2px)}
+.btn.secondary{background:#fff;color:var(--navy)}.btn.ghost{background:#ffffff18;color:white;border:1px solid #ffffff30}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:24px}
+.card{background:#fff;border:1px solid #dce2ec;border-radius:20px;padding:22px;box-shadow:0 8px 25px #1d2d4610}
+.card h3{margin:8px 0}.muted{color:var(--muted);line-height:1.6}.section-title{margin-top:0;color:var(--blue)}
+.progress{height:10px;background:#e7ebf2;border-radius:10px;overflow:hidden;margin:10px 0 20px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#f0cb68);width:0}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.back{background:none;color:var(--blue);font-weight:800;margin-bottom:15px}
+.form{max-width:650px;margin:30px auto}.form label{display:block;font-weight:800;margin:15px 0 7px}.form input,.form select,.form textarea{width:100%;padding:13px 14px;border:1px solid #ccd4e0;border-radius:12px;background:white}
+.content{line-height:1.75}.content strong{color:var(--blue)}.concept{border-left:5px solid var(--gold);padding:14px 18px;background:#fffaf0;border-radius:10px;margin:12px 0}
+.question{max-width:800px;margin:25px auto}.question h2{line-height:1.4}.options{display:grid;gap:12px;margin:22px 0}.option{padding:15px;text-align:left;border:1px solid #ccd4e0;border-radius:14px;background:#fff;font-weight:700}.option:hover{border-color:var(--gold);background:#fffaf0}.option.correct{background:#e6f6ee;border-color:var(--green)}.option.wrong{background:#fdecec;border-color:var(--red)}
+.feedback{padding:14px;border-radius:12px;margin:15px 0;font-weight:700}.ok{background:#e6f6ee;color:#176243}.no{background:#fdecec;color:#9d3333}
+.pill{display:inline-block;padding:5px 10px;background:#edf1f7;border-radius:20px;font-size:12px;font-weight:800;margin:3px}
+.crossword{overflow:auto;margin:20px 0}.cross-grid{display:grid;grid-template-columns:repeat(9,42px);gap:3px;width:max-content;margin:auto}.cell{width:42px;height:42px;border:1px solid #b9c3d2;background:#fff;text-align:center;font-size:22px;font-weight:900;text-transform:uppercase}.black{background:#17233d;border-color:#17233d}
+.clues{display:grid;grid-template-columns:1fr 1fr;gap:18px}.clues ol{line-height:2}.note{background:#eef3fa;padding:14px;border-radius:12px}
+.result-box{text-align:center;padding:28px}.score{font-size:52px;font-weight:900;color:var(--blue)}
+.reflection textarea{min-height:110px}.reflection textarea{width:100%;box-sizing:border-box;display:block;resize:vertical}.small{font-size:13px}
+footer{text-align:center;color:#738096;padding:25px}
+@media(max-width:600px){main{padding:22px 14px 50px}.hero{padding:32px 23px;border-radius:22px}.grid{grid-template-columns:1fr}.card{padding:18px}.clues{grid-template-columns:1fr}.cross-grid{grid-template-columns:repeat(9,34px)}.cell{width:34px;height:34px;font-size:18px}}
+@media print{header,footer,.no-print{display:none!important}main{padding:0}.screen{display:none!important}#result{display:block!important}.hero{box-shadow:none}}
+
+.clue-list{line-height:1.9;margin-top:8px}.tts-answer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.tts-answer{display:flex;align-items:center;gap:8px}.tts-answer b{min-width:28px}.tts-answer input{width:100%;padding:10px;border:1px solid #ccd4e0;border-radius:10px;text-transform:uppercase}.hots-item{background:#f8fafc;border:1px solid #dce2ec;border-radius:14px;padding:15px;margin:14px 0}.hots-item textarea{width:100%;min-height:130px;padding:12px;border:1px solid #ccd4e0;border-radius:10px}.feedback.warn{background:#fff5dc;color:#805d00}
+@media print{#result .hero{background:white!important;color:#18233a!important}#result .hero p,#result .badge{color:#18233a!important}}
+
+.real-crossword-wrap{overflow:auto;padding:10px 4px 18px;background:#eef3fa;border-radius:16px;margin:18px 0}
+.real-crossword{display:grid;grid-template-columns:repeat(18,32px);grid-template-rows:repeat(25,32px);gap:2px;width:max-content;margin:auto}
+.cw-cell{position:relative;width:32px;height:32px;background:#fff;border:1px solid #8e9bb0;border-radius:2px}
+.cw-cell.black{background:#17233d;border-color:#17233d}
+.cw-cell input{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;text-align:center;text-transform:uppercase;font-size:19px;font-weight:900;color:#18233a;padding:6px 2px;outline:none}
+.cw-cell input:focus{background:#fff7d9;box-shadow:inset 0 0 0 2px #d8a83e}
+.cw-cell.correct{background:#e6f6ee;border-color:#2d8a62}.cw-cell.wrong{background:#fdecec;border-color:#c84b4b}
+.cross-clues{display:grid;grid-template-columns:1fr 1fr;gap:18px}.cross-clues ol{line-height:2;margin-top:8px}
+@media(max-width:700px){.cross-clues{grid-template-columns:1fr}.real-crossword{grid-template-columns:repeat(18,28px);grid-template-rows:repeat(25,28px)}.cw-cell{width:28px;height:28px}.cw-cell input{font-size:16px}.cw-num{font-size:7px}}
+
+.real-crossword-wrap{overflow:auto;padding:16px 8px 20px;background:#eef3fa;border-radius:16px;margin:18px 0}
+.real-crossword{display:grid;gap:2px;width:max-content;margin:auto}
+.cw-cell{position:relative;width:32px;height:32px;background:#fff;border:1px solid #8e9bb0;border-radius:2px}
+.cw-cell.black{background:#17233d;border-color:#17233d}
+.cw-cell input{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;text-align:center;text-transform:uppercase;font-size:19px;font-weight:900;color:#18233a;padding:6px 2px;outline:none}
+.cw-cell input:focus{background:#fff7d9;box-shadow:inset 0 0 0 2px #d8a83e}
+.cw-num{position:absolute;top:1px;left:2px;z-index:2;font-size:8px;line-height:8px;font-weight:900;color:#19345f;pointer-events:none}
+.cw-cell.correct{background:#e6f6ee;border-color:#2d8a62}.cw-cell.wrong{background:#fdecec;border-color:#c84b4b}
+.cross-clues{display:grid;grid-template-columns:1fr 1fr;gap:18px}.cross-clues ol{line-height:2;margin-top:8px}
+@media(max-width:700px){.cross-clues{grid-template-columns:1fr}.cw-cell{width:28px;height:28px}.cw-cell input{font-size:16px}.cw-label{font-size:6px;line-height:7px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">🎼 MUSIC <span>QUEST IX</span></div>
+<div class="xp" id="xpBox">Nilai 0</div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+<div class="hero">
+<span class="badge">SENI MUSIK SMPN 5 CILEGON KELAS IX</span>
+<h1>MUSIC QUEST IX</h1>
+<p><b>Unsur-Unsur Musik</b><br>Satu perjalanan belajar dalam 2 JP: memahami konsep, menyelesaikan TTS, menaklukkan tantangan, lalu merefleksikan pembelajaran.</p>
+<button class="btn" onclick="show('identity')">🚀 MULAI PEMBELAJARAN</button>
+</div>
+<div class="grid">
+<div class="card"><b>🎯 Tujuan Pembelajaran</b><p class="muted">Mengidentifikasi dan menjelaskan unsur dasar musik serta penggunaannya.</p></div>
+<div class="card"><b>📖 Eksplorasi Konsep</b><p class="muted">Irama, melodi, notasi, dan interval.</p></div>
+<div class="card"><b>🧩 MUSIC CROSSWORD</b><p class="muted">TTS untuk menguatkan pemahaman konsep.</p></div>
+<div class="card"><b>🏆 Tantangan</b><p class="muted">Kuis pemahaman dan refleksi akhir.</p></div>
+</div>
+</section>
+
+<section id="identity" class="screen">
+<button class="back" onclick="show('home')">← Kembali</button>
+<div class="card form">
+<h2>Identitas Peserta Didik</h2>
+<p class="muted">Lengkapi identitas sebelum pembelajaran dimulai.</p>
+<label>Nama Siswa</label><input id="student" placeholder="Nama lengkap">
+<label>Nama Sekolah</label><input id="school" placeholder="Nama sekolah">
+<label>Kelas</label><select id="class"><option>IX-A</option><option>IX-B</option><option>IX-C</option><option>IX-D</option><option>IX-E</option><option>IX-F</option><option>Lainnya</option></select>
+<br><br><button class="btn" onclick="startLesson()">MULAI QUEST →</button>
+</div>
+</section>
+
+<section id="map" class="screen">
+<div class="topline">
+<div><h2>🗺️ ALUR PEMBELAJARAN</h2><p class="muted">Pertemuan 1 • 2 × 40 menit</p></div>
+<button class="btn secondary" onclick="show('profile')">Profil</button>
+</div>
+<div class="progress"><i id="lessonProgress"></i></div>
+<div class="grid">
+<div class="card"><span class="pill">TAHAP 1</span><h3>🎯 Tujuan Pembelajaran</h3><p class="muted">Pahami target belajar hari ini.</p><button class="btn" onclick="show('objectives')">BUKA →</button></div>
+<div class="card"><span class="pill">TAHAP 2</span><h3>📖 Eksplorasi Konsep</h3><p class="muted">Pelajari empat unsur musik.</p><button class="btn" onclick="show('material')">BUKA →</button></div>
+<div class="card"><span class="pill">TAHAP 3</span><h3>🧩 MUSIC CROSSWORD</h3><p class="muted">Lengkapi TTS berdasarkan materi.</p><button class="btn" onclick="show('crossword')">MAIN →</button></div>
+<div class="card"><span class="pill">TAHAP 4</span><h3>⚡ MUSIC CHALLENGE</h3><p class="muted">Uji pemahaman melalui kuis.</p><button class="btn" onclick="openQuiz()">MULAI →</button></div>
+<div class="card"><span class="pill">TAHAP 5</span><h3>🧠 ASESMEN HOTS</h3><p class="muted">Lima soal uraian literasi untuk analisis dan kreasi.</p><button class="btn" onclick="show('hots')">KERJAKAN →</button></div><div class="card"><span class="pill">TAHAP 6</span><h3>💭 REFLEKSI</h3><p class="muted">Tuliskan pemahaman dan kesulitanmu.</p><button class="btn" onclick="show('reflection')">REFLEKSI →</button></div>
+</div>
+</section>
+
+<section id="objectives" class="screen">
+<button class="back" onclick="show('map')">← Alur Pembelajaran</button>
+<div class="card content">
+<h2 class="section-title">🎯 Tujuan Pembelajaran</h2>
+<p>Setelah mengikuti pembelajaran, peserta didik diharapkan mampu:</p>
+<ol>
+<li>Mengidentifikasi unsur-unsur dasar musik.</li>
+<li>Menjelaskan pengertian <b>irama, melodi, notasi,</b> dan <b>interval</b>.</li>
+<li>Membedakan fungsi unsur-unsur tersebut dalam musik.</li>
+<li>Menunjukkan pemahaman melalui aktivitas TTS dan tantangan interaktif.</li>
+<li>Merefleksikan pemahaman yang diperoleh selama pembelajaran.</li>
+</ol>
+<div class="note"><b>Alokasi waktu:</b> 2 × 40 menit. Fokus pertemuan ini adalah pemahaman konsep dasar, bukan seluruh materi Seni Musik kelas IX.</div>
+</div>
+</section>
+
+<section id="material" class="screen">
+<button class="back" onclick="show('map')">← Alur Pembelajaran</button>
+<div class="card content">
+<h2 class="section-title">📖 Eksplorasi Konsep — Unsur-Unsur Musik</h2>
+<p>Musik tersusun atas berbagai unsur yang saling berhubungan. Pada pertemuan ini kita fokus pada empat konsep dasar.</p>
+<div class="concept"><h3>🥁 1. Irama</h3>
+<p><b>Irama</b> adalah pola gerak bunyi yang terbentuk dari panjang-pendek bunyi, ketukan, aksen, dan pengulangan secara teratur. Irama membuat musik terasa memiliki gerakan dan keteraturan. Ketika kita mendengarkan lagu, irama dapat membantu kita merasakan ketukan sehingga secara spontan kita dapat menganggukkan kepala, menepuk tangan, atau bergerak mengikuti musik.</p>
+<p>Irama berbeda dari sekadar bunyi yang muncul berurutan. Dalam musik, bunyi disusun dengan pola tertentu sehingga ada bagian yang terasa lebih kuat, lebih lemah, lebih panjang, atau lebih pendek. Jika ketukan dimainkan tidak teratur, penampilan musik dapat terdengar kurang stabil meskipun nada-nadanya sudah benar.</p></div>
+<div class="concept"><h3>🎵 2. Melodi</h3>
+<p><b>Melodi</b> adalah rangkaian nada yang tersusun secara berurutan dan terdengar sebagai satu kesatuan musikal. Melodi biasanya menjadi bagian yang paling mudah dikenali atau diingat dari sebuah lagu karena membentuk alur nada yang dapat dinyanyikan atau dimainkan dengan alat musik.</p>
+<p>Melodi memiliki hubungan dengan <b>tinggi-rendah nada</b> dan pergerakan nada dari satu bunyi ke bunyi berikutnya. Sebuah melodi dapat bergerak naik, turun, atau tetap pada nada tertentu. Melodi juga dapat memiliki pola pendek yang kemudian dikembangkan menjadi bagian lagu yang lebih panjang.</p></div>
+<div class="concept"><h3>📝 3. Notasi</h3>
+<p><b>Notasi</b> adalah sistem atau tanda yang digunakan untuk menuliskan dan menyampaikan musik. Dengan notasi, gagasan musik dapat disimpan dan dibaca kembali sehingga orang lain dapat mempelajari atau memainkan karya tersebut tanpa harus selalu mendengarkan contoh secara langsung.</p>
+<p>Notasi dapat memberikan informasi penting tentang nada, termasuk tinggi-rendahnya bunyi dan hubungan antarnada. Dalam pembelajaran musik, kemampuan membaca notasi membantu siswa memahami bagaimana sebuah melodi dituliskan. Karena itu, notasi dapat dipandang sebagai salah satu cara untuk mengubah gagasan musikal menjadi bentuk yang dapat didokumentasikan dan dipelajari.</p></div>
+<div class="concept"><h3>↔️ 4. Interval</h3>
+<p><b>Interval</b> adalah jarak antara dua nada. Konsep ini membantu kita memahami seberapa dekat atau jauh hubungan antara satu nada dengan nada lainnya. Ketika dua nada dimainkan secara berurutan, kita dapat memperhatikan perbedaan tinggi-rendah keduanya untuk memahami interval yang terbentuk.</p>
+<p>Interval penting dalam memahami melodi karena melodi tidak hanya terdiri atas kumpulan nada, tetapi juga memiliki hubungan antarnada. Dengan mengenali interval, siswa dapat lebih mudah memahami pergerakan melodi, membaca hubungan tinggi-rendah nada pada notasi, serta menjelaskan mengapa suatu rangkaian nada terdengar memiliki karakter tertentu.</p></div>
+<div class="note"><b>Hubungan keempat konsep:</b> Irama membantu mengatur gerak dan ketukan musik, melodi membentuk rangkaian nada yang terdengar sebagai satu kesatuan, notasi membantu menuliskan dan membaca gagasan musik, sedangkan interval membantu memahami jarak antara nada-nada dalam melodi. Keempatnya saling berhubungan ketika kita membaca, memainkan, atau mendengarkan musik.</div>
+<div class="note"><b>Checkpoint:</b> Sebelum masuk TTS, coba jelaskan dengan bahasamu sendiri: (1) apa yang membuat ketukan terasa teratur, (2) apa yang membuat sebuah lagu memiliki alur nada yang mudah dikenali, (3) mengapa musik perlu dituliskan dengan notasi, dan (4) apa yang dimaksud jarak antara dua nada.</div>
+</div>
+</section>
+
+<section id="crossword" class="screen">
+<button class="back" onclick="show('map')">← Alur Pembelajaran</button>
+<div class="card">
+<h2 class="section-title">🧩 MUSIC CROSSWORD</h2>
+<p class="muted">Lengkapi <b>10 petunjuk mendatar</b> dan <b>10 petunjuk menurun</b>. Nomor mendatar dan menurun masing-masing dimulai dari <b>1–10</b>.</p>
+
+<div class="real-crossword-wrap">
+  <div id="realCrossword" class="real-crossword" style="grid-template-columns:repeat(26,32px);grid-template-rows:repeat(18,32px);">
+    <div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="0" data-c="17"><span class="cw-num">10</span><input maxlength="1" autocomplete="off" aria-label="Kotak 1-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="1" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 2-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="2" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 3-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="3" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 4-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="3" data-c="24"><span class="cw-num">3</span><input maxlength="1" autocomplete="off" aria-label="Kotak 4-25"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="4" data-c="15"><span class="cw-num">4</span><input maxlength="1" autocomplete="off" aria-label="Kotak 5-16"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="4" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 5-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="4" data-c="24"><input maxlength="1" autocomplete="off" aria-label="Kotak 5-25"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="5" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 6-16"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="5" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 6-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="5" data-c="24"><input maxlength="1" autocomplete="off" aria-label="Kotak 6-25"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="6" data-c="1"><span class="cw-num">6</span><input maxlength="1" autocomplete="off" aria-label="Kotak 7-2"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="6" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 7-16"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="6" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 7-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="6" data-c="24"><input maxlength="1" autocomplete="off" aria-label="Kotak 7-25"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="7" data-c="1"><input maxlength="1" autocomplete="off" aria-label="Kotak 8-2"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="7" data-c="4"><span class="cw-num">2</span><input maxlength="1" autocomplete="off" aria-label="Kotak 8-5"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="7" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 8-16"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="7" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 8-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="7" data-c="24"><input maxlength="1" autocomplete="off" aria-label="Kotak 8-25"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="8" data-c="1"><input maxlength="1" autocomplete="off" aria-label="Kotak 9-2"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="8" data-c="4"><input maxlength="1" autocomplete="off" aria-label="Kotak 9-5"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="8" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 9-16"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="8" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 9-18"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="8" data-c="24"><input maxlength="1" autocomplete="off" aria-label="Kotak 9-25"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="9" data-c="1"><span class="cw-num">9</span><input maxlength="1" autocomplete="off" aria-label="Kotak 10-2"></div><div class="cw-cell" data-r="9" data-c="2"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-3"></div><div class="cw-cell" data-r="9" data-c="3"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-4"></div><div class="cw-cell" data-r="9" data-c="4"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-5"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="9" data-c="14"><span class="cw-num">6</span><input maxlength="1" autocomplete="off" aria-label="Kotak 10-15"></div><div class="cw-cell" data-r="9" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-16"></div><div class="cw-cell" data-r="9" data-c="16"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-17"></div><div class="cw-cell" data-r="9" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-18"></div><div class="cw-cell" data-r="9" data-c="18"><span class="cw-num">9</span><input maxlength="1" autocomplete="off" aria-label="Kotak 10-19"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="9" data-c="21"><span class="cw-num">7</span><input maxlength="1" autocomplete="off" aria-label="Kotak 10-22"></div><div class="cw-cell" data-r="9" data-c="22"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-23"></div><div class="cw-cell" data-r="9" data-c="23"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-24"></div><div class="cw-cell" data-r="9" data-c="24"><input maxlength="1" autocomplete="off" aria-label="Kotak 10-25"></div><div class="cw-cell" data-r="9" data-c="25"><span class="cw-num">7</span><input maxlength="1" autocomplete="off" aria-label="Kotak 10-26"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="10" data-c="4"><input maxlength="1" autocomplete="off" aria-label="Kotak 11-5"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="10" data-c="9"><span class="cw-num">8</span><input maxlength="1" autocomplete="off" aria-label="Kotak 11-10"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="10" data-c="13"><span class="cw-num">1</span><input maxlength="1" autocomplete="off" aria-label="Kotak 11-14"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="10" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 11-16"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="10" data-c="18"><input maxlength="1" autocomplete="off" aria-label="Kotak 11-19"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="10" data-c="25"><input maxlength="1" autocomplete="off" aria-label="Kotak 11-26"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="11" data-c="4"><span class="cw-num">1</span><input maxlength="1" autocomplete="off" aria-label="Kotak 12-5"></div><div class="cw-cell" data-r="11" data-c="5"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-6"></div><div class="cw-cell" data-r="11" data-c="6"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-7"></div><div class="cw-cell" data-r="11" data-c="7"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-8"></div><div class="cw-cell" data-r="11" data-c="8"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-9"></div><div class="cw-cell" data-r="11" data-c="9"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-10"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="11" data-c="13"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-14"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="11" data-c="18"><span class="cw-num">4</span><input maxlength="1" autocomplete="off" aria-label="Kotak 12-19"></div><div class="cw-cell" data-r="11" data-c="19"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-20"></div><div class="cw-cell" data-r="11" data-c="20"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-21"></div><div class="cw-cell" data-r="11" data-c="21"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-22"></div><div class="cw-cell" data-r="11" data-c="22"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-23"></div><div class="cw-cell" data-r="11" data-c="23"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-24"></div><div class="cw-cell" data-r="11" data-c="24"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-25"></div><div class="cw-cell" data-r="11" data-c="25"><input maxlength="1" autocomplete="off" aria-label="Kotak 12-26"></div><div class="cw-cell" data-r="12" data-c="0"><span class="cw-num">2</span><input maxlength="1" autocomplete="off" aria-label="Kotak 13-1"></div><div class="cw-cell" data-r="12" data-c="1"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-2"></div><div class="cw-cell" data-r="12" data-c="2"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-3"></div><div class="cw-cell" data-r="12" data-c="3"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-4"></div><div class="cw-cell" data-r="12" data-c="4"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-5"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="12" data-c="9"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-10"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="12" data-c="13"><span class="cw-num">5</span><input maxlength="1" autocomplete="off" aria-label="Kotak 13-14"></div><div class="cw-cell" data-r="12" data-c="14"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-15"></div><div class="cw-cell" data-r="12" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-16"></div><div class="cw-cell" data-r="12" data-c="16"><span class="cw-num">5</span><input maxlength="1" autocomplete="off" aria-label="Kotak 13-17"></div><div class="cw-cell" data-r="12" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-18"></div><div class="cw-cell" data-r="12" data-c="18"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-19"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="12" data-c="25"><input maxlength="1" autocomplete="off" aria-label="Kotak 13-26"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="13" data-c="9"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-10"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="13" data-c="13"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-14"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="13" data-c="16"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-17"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="13" data-c="18"><span class="cw-num">8</span><input maxlength="1" autocomplete="off" aria-label="Kotak 14-19"></div><div class="cw-cell" data-r="13" data-c="19"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-20"></div><div class="cw-cell" data-r="13" data-c="20"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-21"></div><div class="cw-cell" data-r="13" data-c="21"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-22"></div><div class="cw-cell" data-r="13" data-c="22"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-23"></div><div class="cw-cell" data-r="13" data-c="23"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-24"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="13" data-c="25"><input maxlength="1" autocomplete="off" aria-label="Kotak 14-26"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="14" data-c="9"><span class="cw-num">10</span><input maxlength="1" autocomplete="off" aria-label="Kotak 15-10"></div><div class="cw-cell" data-r="14" data-c="10"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-11"></div><div class="cw-cell" data-r="14" data-c="11"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-12"></div><div class="cw-cell" data-r="14" data-c="12"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-13"></div><div class="cw-cell" data-r="14" data-c="13"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-14"></div><div class="cw-cell" data-r="14" data-c="14"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-15"></div><div class="cw-cell" data-r="14" data-c="15"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-16"></div><div class="cw-cell" data-r="14" data-c="16"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-17"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="14" data-c="18"><input maxlength="1" autocomplete="off" aria-label="Kotak 15-19"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="15" data-c="13"><input maxlength="1" autocomplete="off" aria-label="Kotak 16-14"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="15" data-c="16"><input maxlength="1" autocomplete="off" aria-label="Kotak 16-17"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="16" data-c="13"><input maxlength="1" autocomplete="off" aria-label="Kotak 17-14"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="16" data-c="16"><input maxlength="1" autocomplete="off" aria-label="Kotak 17-17"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="17" data-c="13"><input maxlength="1" autocomplete="off" aria-label="Kotak 18-14"></div><div class="cw-cell black"></div><div class="cw-cell" data-r="17" data-c="15"><span class="cw-num">3</span><input maxlength="1" autocomplete="off" aria-label="Kotak 18-16"></div><div class="cw-cell" data-r="17" data-c="16"><input maxlength="1" autocomplete="off" aria-label="Kotak 18-17"></div><div class="cw-cell" data-r="17" data-c="17"><input maxlength="1" autocomplete="off" aria-label="Kotak 18-18"></div><div class="cw-cell" data-r="17" data-c="18"><input maxlength="1" autocomplete="off" aria-label="Kotak 18-19"></div><div class="cw-cell" data-r="17" data-c="19"><input maxlength="1" autocomplete="off" aria-label="Kotak 18-20"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div>
+  </div>
+</div>
+
+<div class="cross-clues">
+  <div class="card">
+    <h3>➡️ Mendatar</h3>
+    <ol>
+      <li>Rangkaian nada yang terdengar sebagai satu kesatuan musikal. <span class="pill">6 huruf</span></li><li>Pola panjang-pendek bunyi dan ketukan dalam musik. <span class="pill">5 huruf</span></li><li>Kecepatan sebuah lagu dimainkan. <span class="pill">5 huruf</span></li><li>Keras-lembutnya bunyi dalam musik. <span class="pill">8 huruf</span></li><li>Warna atau karakter khas dari suatu bunyi/suara. <span class="pill">6 huruf</span></li><li>Kata-kata yang dinyanyikan dalam sebuah lagu. <span class="pill">5 huruf</span></li><li>Gagasan musikal pendek yang dapat dikembangkan. <span class="pill">5 huruf</span></li><li>Sistem atau tanda yang digunakan untuk menuliskan musik. <span class="pill">6 huruf</span></li><li>Gabungan beberapa nada yang dibunyikan secara bersamaan. <span class="pill">4 huruf</span></li><li>Ungkapan perasaan atau penjiwaan dalam memainkan musik. <span class="pill">8 huruf</span></li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>⬇️ Menurun</h3>
+    <ol>
+      <li>Jarak antara dua nada. <span class="pill">8 huruf</span></li><li>Pola pengelompokan ketukan secara teratur dalam musik. <span class="pill">6 huruf</span></li><li>Keselarasan atau perpaduan beberapa nada yang terdengar serasi. <span class="pill">7 huruf</span></li><li>Bagian lagu yang biasanya menjadi inti dan sering diulang. <span class="pill">7 huruf</span></li><li>Bagian musik yang berfungsi menghubungkan atau mengembangkan bagian lagu. <span class="pill">6 huruf</span></li><li>Bunyi yang memiliki tinggi-rendah tertentu dalam musik. <span class="pill">4 huruf</span></li><li>Bagian atau potongan pendek dari sebuah melodi atau kalimat musik. <span class="pill">5 huruf</span></li><li>Istilah yang berkaitan dengan pola gerak ketukan dalam musik. <span class="pill">5 huruf</span></li><li>Bagian atau pola penutup dalam sebuah frase/karya musik. <span class="pill">6 huruf</span></li><li>Cara pengucapan atau pembawaan setiap nada dalam permainan musik. <span class="pill">10 huruf</span></li>
+    </ol>
+  </div>
+</div>
+
+<p id="crossFeedback"></p>
+<button class="btn" onclick="checkRealCrossword()">✓ PERIKSA TTS</button>
+<button class="btn secondary" onclick="clearCrossword()">↺ KOSONGKAN</button>
+</div>
+</section>
+
+<section id="quiz" class="screen">
+<button class="back" onclick="show('map')">← Alur Pembelajaran</button>
+<div class="card">
+<span class="pill">MUSIC CHALLENGE</span><span class="pill" id="quizCounter"></span>
+<div id="quizArea"></div>
+</div>
+</section>
+
+<section id="hots" class="screen">
+<button class="back" onclick="show('map')">← Alur Pembelajaran</button>
+<div class="card reflection">
+<h2 class="section-title">🧠 ASESMEN URAIAN — LITERASI HOTS</h2>
+<p class="muted">Jawablah dengan alasan yang jelas. Gunakan konsep unsur musik untuk menganalisis situasi, bukan sekadar menghafal definisi.</p>
+
+<div class="hots-item"><p><b>1.</b> Sebuah kelompok siswa memainkan lagu dengan melodi yang sudah tepat, tetapi ketukannya sering tidak teratur. Analisis unsur musik yang menjadi masalah dan jelaskan dampaknya terhadap penampilan.</p><textarea id="h1" placeholder="Jawaban uraian..."></textarea></div>
+<div class="hots-item"><p><b>2.</b> Dua lagu memiliki melodi yang hampir sama, tetapi terdengar sangat berbeda karena cara pembawaan dan keras-lembut bunyinya. Analisis unsur yang mungkin menyebabkan perbedaan tersebut.</p><textarea id="h2" placeholder="Jawaban uraian..."></textarea></div>
+<div class="hots-item"><p><b>3.</b> Bayangkan kamu diminta membantu teman yang kesulitan membaca sebuah notasi musik. Jelaskan langkah yang akan kamu lakukan agar teman tersebut dapat memahami hubungan tinggi-rendah nada dan intervalnya.</p><textarea id="h3" placeholder="Jawaban uraian..."></textarea></div>
+<div class="hots-item"><p><b>4.</b> Dalam sebuah pertunjukan, tempo lagu terlalu cepat sehingga lirik dan melodi sulit dikenali. Menurut analisis kamu, apa hubungan tempo dengan keterjelasan penyajian musik? Jelaskan.</p><textarea id="h4" placeholder="Jawaban uraian..."></textarea></div>
+<div class="hots-item"><p><b>5.</b> Kamu diminta merancang latihan sederhana untuk kelompok musik pemula agar mereka mampu membedakan irama dan melodi. Rancang langkah latihan dan jelaskan alasan pemilihan aktivitasmu.</p><textarea id="h5" placeholder="Jawaban uraian..."></textarea></div>
+
+<button class="btn" onclick="saveHOTS()">💾 SIMPAN JAWABAN</button>
+<p id="hotsFeedback"></p>
+</div>
+</section>
+<section id="reflection" class="screen">
+<button class="back" onclick="show('map')">← Alur Pembelajaran</button>
+<div class="card reflection">
+<h2 class="section-title">💭 Refleksi Pembelajaran</h2>
+<p><b>1.</b> Unsur musik apa yang paling mudah kamu pahami? Mengapa?</p>
+<textarea id="r1" placeholder="Tuliskan jawabanmu..."></textarea>
+<p><b>2.</b> Apa hal yang masih membuatmu bingung?</p>
+<textarea id="r2" placeholder="Tuliskan jawabanmu..."></textarea>
+<p><b>3.</b> Setelah pembelajaran ini, bagaimana kamu menjelaskan perbedaan irama dan melodi?</p>
+<textarea id="r3" placeholder="Tuliskan jawabanmu..."></textarea>
+<br><button class="btn" onclick="finishLesson()">SELESAI & LIHAT HASIL →</button>
+</div>
+</section>
+
+<section id="profile" class="screen">
+<button class="back" onclick="show('map')">← Alur Pembelajaran</button>
+<div class="card">
+<h2>🏅 Profil Pembelajaran</h2>
+<p><b id="profileName"></b> • <span id="profileSchool"></span> • <span id="profileClass"></span></p>
+<h3 id="totalScore">Nilai: 0/100</h3>
+<div class="grid">
+<div class="card"><b>TTS</b><p id="crossScore" class="muted">Belum dinilai</p></div>
+<div class="card"><b>Challenge</b><p id="quizScore" class="muted">Belum dinilai</p></div><div class="card"><b>Asesmen HOTS</b><p id="hotsScore" class="muted">Belum disimpan</p></div>
+<div class="card"><b>Refleksi</b><p id="reflectionScore" class="muted">Belum selesai</p></div>
+</div>
+<br><button class="btn" onclick="finalResult()">🏆 LIHAT HASIL</button> <button class="btn secondary" onclick="downloadPDF()">📄 DOWNLOAD HASIL PDF</button>
+</div>
+</section>
+
+<section id="result" class="screen">
+<div class="hero result-box">
+<span class="badge">PEMBELAJARAN SELESAI</span>
+<h1>🏆 HASIL MUSIC QUEST</h1>
+<p id="resultText"></p>
+<div class="score" id="resultScore">0/100</div>
+<p id="resultDetail"></p>
+<button class="btn no-print" onclick="window.print()">🖨️ CETAK / SIMPAN PDF</button>
+<button class="btn secondary no-print" onclick="show('map')">Kembali ke Pembelajaran</button>
+</div>
+</section>
+</main>
+<footer>Developed for interactive Seni Musik learning • MUSIC QUEST IX • Pertemuan 1</footer>
+
+<script>
+const state={student:"",school:"",class:"",cross:0,quiz:0,reflection:false,final:0};
+const ttsAnswers=[]; // TTS menggunakan grid silang di bawah.
+
+const crosswordWords=[
+  {n:1,d:"A",w:"MELODI"},
+  {n:2,d:"A",w:"IRAMA"},
+  {n:3,d:"A",w:"TEMPO"},
+  {n:4,d:"A",w:"DINAMIKA"},
+  {n:5,d:"A",w:"TIMBRE"},
+  {n:6,d:"A",w:"LIRIK"},
+  {n:7,d:"A",w:"MOTIF"},
+  {n:8,d:"A",w:"NOTASI"},
+  {n:9,d:"A",w:"AKOR"},
+  {n:10,d:"A",w:"EKSPRESI"},
+  {n:1,d:"D",w:"INTERVAL"},
+  {n:2,d:"D",w:"BIRAMA"},
+  {n:3,d:"D",w:"HARMONI"},
+  {n:4,d:"D",w:"REFRAIN"},
+  {n:5,d:"D",w:"BRIDGE"},
+  {n:6,d:"D",w:"NADA"},
+  {n:7,d:"D",w:"FRASE"},
+  {n:8,d:"D",w:"RITME"},
+  {n:9,d:"D",w:"KADENS"},
+  {n:10,d:"D",w:"ARTIKULASI"}
+];
+
+const quiz=[
+["Unsur musik yang berkaitan dengan panjang-pendek dan pola ketukan disebut …",["Irama","Melodi","Notasi","Interval"],0],
+["Rangkaian nada yang terdengar sebagai satu kesatuan musikal disebut …",["Irama","Melodi","Notasi","Interval"],1],
+["Sistem atau tanda yang digunakan untuk menuliskan musik disebut …",["Melodi","Interval","Notasi","Irama"],2],
+["Jarak antara dua nada disebut …",["Notasi","Interval","Irama","Melodi"],1],
+["Kecepatan sebuah lagu dimainkan disebut …",["Tempo","Timbre","Dinamika","Lirik"],0],
+["Keras-lembutnya bunyi dalam musik berkaitan dengan …",["Melodi","Dinamika","Interval","Notasi"],1],
+["Warna atau karakter khas suara disebut …",["Timbre","Tempo","Birama","Motif"],0],
+["Gagasan musikal pendek yang dapat dikembangkan disebut …",["Motif","Lirik","Tempo","Akor"],0],
+["Jika sebuah lagu memiliki melodi tepat tetapi ketukan tidak stabil, unsur yang perlu diperbaiki terutama adalah …",["Irama","Notasi","Timbre","Interval"],0],
+["Mengapa interval penting dalam memahami melodi?",["Karena menunjukkan hubungan jarak antar nada","Karena menentukan lirik","Karena menggantikan tempo","Karena menentukan nama alat musik"],0]
+];
+
+let qi=0,qcorrect=0;
+
+function save(){localStorage.setItem("musicQuestIXOneMeeting",JSON.stringify(state));updateTop()}
+function load(){try{const x=JSON.parse(localStorage.getItem("musicQuestIXOneMeeting"));if(x)Object.assign(state,x)}catch(e){}}
+function updateTop(){document.getElementById("xpBox").textContent="Nilai "+(state.final||0)}
+function show(id){
+document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+document.getElementById(id).classList.add("active");window.scrollTo(0,0);
+if(id==="profile")renderProfile(); if(id==="map")updateProgress();
+}
+function updateProgress(){
+let n=0;if(state.cross)n++;if(state.quiz)n++;if(state.hotsDone)n++;if(state.reflection)n++;
+document.getElementById("lessonProgress").style.width=(n/4*100)+"%";
+}
+function normalizeName(v){
+  return v.trim()
+    .replace(/\s+/g," ")
+    .toLocaleLowerCase("id-ID")
+    .replace(/(^|[\s\-\u2019'])(\p{L})/gu,(m,sep,ch)=>sep+ch.toLocaleUpperCase("id-ID"));
+}
+// Penulisan nama dan nama sekolah otomatis mengikuti format ejaan: huruf awal tiap kata kapital.
+document.addEventListener("blur",e=>{
+  if(e.target.id==="student"||e.target.id==="school") e.target.value=normalizeName(e.target.value);
+},true);
+
+function startLesson(){
+let n=document.getElementById("student").value,s=document.getElementById("school").value;
+if(!n.trim()||!s.trim()){alert("Silakan isi nama siswa dan nama sekolah.");return}
+state.student=normalizeName(n);state.school=normalizeName(s);state.class=document.getElementById("class").value;
+save();show("map");
+}
+
+function buildTTS(){}
+
+const crosswordAnswerMap = {"11,4": "M", "11,5": "E", "11,6": "L", "11,7": "O", "11,8": "D", "11,9": "I", "12,0": "I", "12,1": "R", "12,2": "A", "12,3": "M", "12,4": "A", "17,15": "T", "17,16": "E", "17,17": "M", "17,18": "P", "17,19": "O", "11,18": "D", "11,19": "I", "11,20": "N", "11,21": "A", "11,22": "M", "11,23": "I", "11,24": "K", "11,25": "A", "12,13": "T", "12,14": "I", "12,15": "M", "12,16": "B", "12,17": "R", "12,18": "E", "9,14": "L", "9,15": "I", "9,16": "R", "9,17": "I", "9,18": "K", "9,21": "M", "9,22": "O", "9,23": "T", "9,24": "I", "9,25": "F", "13,18": "N", "13,19": "O", "13,20": "T", "13,21": "A", "13,22": "S", "13,23": "I", "9,1": "A", "9,2": "K", "9,3": "O", "9,4": "R", "14,9": "E", "14,10": "K", "14,11": "S", "14,12": "P", "14,13": "R", "14,14": "E", "14,15": "S", "14,16": "I", "10,13": "I", "11,13": "N", "13,13": "E", "15,13": "V", "16,13": "A", "17,13": "L", "7,4": "B", "8,4": "I", "10,4": "A", "3,24": "H", "4,24": "A", "5,24": "R", "6,24": "M", "7,24": "O", "8,24": "N", "4,15": "R", "5,15": "E", "6,15": "F", "7,15": "R", "8,15": "A", "10,15": "N", "13,16": "R", "15,16": "D", "16,16": "G", "6,1": "N", "7,1": "A", "8,1": "D", "10,25": "R", "12,25": "S", "13,25": "E", "10,9": "R", "12,9": "T", "13,9": "M", "10,18": "A", "14,18": "S", "0,17": "A", "1,17": "R", "2,17": "T", "3,17": "I", "4,17": "K", "5,17": "U", "6,17": "L", "7,17": "A", "8,17": "S"};
+
+function checkRealCrossword(){
+  const cells=document.querySelectorAll("#realCrossword .cw-cell:not(.black)");
+  let correct=0;
+  cells.forEach(cell=>{
+    const key=cell.dataset.r+","+cell.dataset.c;
+    const input=cell.querySelector("input");
+    const value=(input.value||"").trim().toUpperCase();
+    cell.classList.remove("correct","wrong");
+    if(value && crosswordAnswerMap[key]===value){
+      correct++;
+      cell.classList.add("correct");
+    }else if(value){
+      cell.classList.add("wrong");
+    }
+  });
+  state.cross=Math.round(correct/cells.length*100);
+  save();
+  const f=document.getElementById("crossFeedback");
+  f.className="feedback "+(state.cross===100?"ok":"warn");
+  f.textContent=state.cross===100
+    ?"✓ TTS selesai. Semua jawaban dan persilangan benar."
+    :`Skor TTS ${state.cross}/100. Kotak hijau benar, kotak merah perlu diperbaiki.`;
+  updateProgress();
+}
+
+function clearCrossword(){
+  document.querySelectorAll("#realCrossword input").forEach(i=>i.value="");
+  document.querySelectorAll("#realCrossword .cw-cell").forEach(c=>c.classList.remove("correct","wrong"));
+  document.getElementById("crossFeedback").textContent="";
+  state.cross=0;
+  save();
+  updateProgress();
+}
+
+// Pindah otomatis ke kotak berikutnya saat siswa mengetik.
+document.addEventListener("input",e=>{
+  if(!e.target.matches("#realCrossword input")) return;
+  e.target.value=e.target.value.toUpperCase().replace(/[^A-Z]/g,"").slice(0,1);
+  if(e.target.value){
+    const inputs=[...document.querySelectorAll("#realCrossword input")];
+    const i=inputs.indexOf(e.target);
+    if(i>=0 && i<inputs.length-1) inputs[i+1].focus();
+  }
+});
+document.addEventListener("keydown",e=>{
+  if(!e.target.matches("#realCrossword input")) return;
+  const inputs=[...document.querySelectorAll("#realCrossword input")];
+  const i=inputs.indexOf(e.target);
+  if(e.key==="Backspace" && !e.target.value && i>0){e.preventDefault();inputs[i-1].focus();}
+});
+
+function openQuiz(){qi=0;qcorrect=0;show("quiz");renderQuiz()}
+function renderQuiz(){
+if(qi>=quiz.length){state.quiz=Math.round(qcorrect/quiz.length*100);save();
+document.getElementById("quizArea").innerHTML=`<div class="result-box"><h2>🎉 Challenge Selesai!</h2><div class="score">${state.quiz}/100</div><p>Jawaban benar: ${qcorrect} dari ${quiz.length}</p><button class="btn" onclick="show('map')">KEMBALI →</button></div>`;return}
+let q=quiz[qi];document.getElementById("quizCounter").textContent=`Soal ${qi+1}/10`;
+document.getElementById("quizArea").innerHTML=`<div class="question"><h2>${q[0]}</h2><div class="options">${q[1].map((o,i)=>`<button class="option" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div><div id="qFeedback"></div></div>`;
+}
+function answerQuiz(i){
+let q=quiz[qi],bs=document.querySelectorAll("#quizArea .option");bs.forEach(b=>b.disabled=true);let f=document.getElementById("qFeedback");
+if(i===q[2]){qcorrect++;bs[i].classList.add("correct");f.className="feedback ok";f.textContent="✓ Benar!"}
+else{bs[i].classList.add("wrong");bs[q[2]].classList.add("correct");f.className="feedback no";f.textContent="✗ Belum tepat. Jawaban yang benar: "+q[1][q[2]]}
+setTimeout(()=>{qi++;renderQuiz()},700)
+}
+
+function saveHOTS(){
+let answers=[];for(let i=1;i<=5;i++)answers.push((document.getElementById("h"+i).value||"").trim());
+let filled=answers.filter(x=>x.length>20).length;
+if(filled<5){document.getElementById("hotsFeedback").className="feedback warn";document.getElementById("hotsFeedback").textContent="Lengkapi kelima jawaban dengan uraian yang cukup.";return}
+state.hotsDone=true;state.hotsAnswers=answers;save();
+document.getElementById("hotsFeedback").className="feedback ok";document.getElementById("hotsFeedback").textContent="✓ Lima jawaban HOTS tersimpan.";
+updateProgress();
+}
+
+function finishLesson(){
+if(!state.quiz){alert("Selesaikan MUSIC CHALLENGE terlebih dahulu.");return}
+if(!state.hotsDone){alert("Selesaikan dan simpan 5 asesmen HOTS terlebih dahulu.");return}
+state.reflection=true;state.final=Math.round((state.cross+state.quiz)/2);save();finalResult()
+}
+function renderProfile(){
+document.getElementById("profileName").textContent=state.student;document.getElementById("profileSchool").textContent=state.school;document.getElementById("profileClass").textContent=state.class;
+document.getElementById("totalScore").textContent="Nilai: "+state.final+"/100";
+document.getElementById("crossScore").textContent=state.cross?state.cross+"/100":"Belum dinilai";
+document.getElementById("quizScore").textContent=state.quiz?state.quiz+"/100":"Belum dinilai";
+document.getElementById("hotsScore").textContent=state.hotsDone?"5 soal tersimpan":"Belum disimpan";
+document.getElementById("reflectionScore").textContent=state.reflection?"Selesai":"Belum selesai";
+}
+function finalResult(){
+if(!state.quiz){alert("Selesaikan MUSIC CHALLENGE terlebih dahulu.");return}
+document.getElementById("resultText").textContent=`${state.student} • ${state.school} • ${state.class}`;
+document.getElementById("resultScore").textContent=(state.final||0)+"/100";
+document.getElementById("resultDetail").textContent=`TTS: ${state.cross}/100 • Challenge: ${state.quiz}/100 • HOTS: ${state.hotsDone?"Selesai":"Belum"} • Refleksi: ${state.reflection?"Selesai":"Belum"}`;
+show("result")
+}
+
+function downloadPDF(){
+const hots=(state.hotsAnswers||["","","","",""]);
+const w=window.open("","_blank");
+if(!w){alert("Izinkan pop-up browser untuk membuat PDF.");return}
+w.document.write(`<html><head><title>Hasil MUSIC QUEST IX</title>
+<style>body{font-family:Arial,sans-serif;margin:35px;color:#18233a}h1,h2{color:#19345f}.box{border:1px solid #ccd4e0;border-radius:10px;padding:14px;margin:12px 0}.score{font-size:32px;font-weight:800}.q{margin:14px 0}small{color:#68738a}@media print{button{display:none}}</style></head><body>
+<h1>🎼 MUSIC QUEST IX</h1><h2>Hasil Pembelajaran — Pertemuan 1</h2>
+<div class="box"><b>Nama:</b> ${esc(state.student)}<br><b>Sekolah:</b> ${esc(state.school)}<br><b>Kelas:</b> ${esc(state.class)}</div>
+<div class="box"><div class="score">Nilai Akhir: ${state.final||0}/100</div><p>TTS: ${state.cross||0}/100<br>Challenge: ${state.quiz||0}/100<br>Asesmen HOTS: ${state.hotsDone?"Selesai":"Belum"}<br>Refleksi: ${state.reflection?"Selesai":"Belum"}</p></div>
+<h2>Asesmen Uraian Literasi HOTS</h2>
+${hots.map((a,i)=>`<div class="q"><b>${i+1}.</b><p>${esc(a)||"<i>Belum dijawab.</i>"}</p></div>`).join("")}
+<br><small>Dokumen hasil pembelajaran MUSIC QUEST IX — Pertemuan 1</small>
+<script>window.onload=()=>window.print();<\/script></body></html>`);
+w.document.close();
+}
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+
+load();updateTop();updateProgress();
+if(state.hotsAnswers){state.hotsAnswers.forEach((a,i)=>{let e=document.getElementById("h"+(i+1));if(e)e.value=a})}
+
+</script>
+</body>
+</html>
